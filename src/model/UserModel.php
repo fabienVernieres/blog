@@ -9,7 +9,7 @@
  * 
  * @category Model
  * @package  Blog
- * @author   Vernières fabien <fabienvernieres@gmail.com>
+ * @author   Vernières fabien <contact@fabienvernieres.com>
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
@@ -23,7 +23,7 @@ use app\entity\UserEntity;
  * 
  * @category Class
  * @package  Blog
- * @author   Vernières fabien <fabienvernieres@gmail.com>
+ * @author   Vernières fabien <contact@fabienvernieres.com>
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
