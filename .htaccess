@@ -1,0 +1,13 @@
+DirectoryIndex index.php
+RewriteEngine On
+
+RewriteRule ^/?$ public/ [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ public/?url=$1 [NC,L,QSA]
+
+<Files *.json>
+  order allow,deny
+  deny from all
+</Files>

@@ -1,0 +1,23 @@
+{
+  "name": "vendor/blog",
+  "description": "premier blog",
+  "type": "project",
+  "authors": [
+    {
+      "name": "fabien Vernières",
+      "email": "fabienvernieres@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "app\\": [
+        "src/"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "behat/transliterator": "^1.5",
+    "phpmailer/phpmailer": "^6.6"
+  }
+}
