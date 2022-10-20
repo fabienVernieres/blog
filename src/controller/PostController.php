@@ -17,12 +17,13 @@
 
 namespace app\controller;
 
+use stdClass;
 use app\model\PostModel;
 use app\entity\PostEntity;
+use app\service\AuthService;
 use app\service\FormService;
 use app\service\RenderService;
 use Behat\Transliterator\Transliterator;
-use stdClass;
 
 /**
  * PostController
@@ -128,66 +129,28 @@ class PostController
         // Initie PostEntity et stdClass
         $post = new PostEntity();
         $comment = new stdClass();
+        AuthService::isActiveSession();
 
-        session_start();
+        $slug = $_POST['slug'];
 
-        // Contrôle le $_POST slug
-        if (!empty($_POST['slug'])) {
-            $slug = FormService::controlInputText(
-                $_POST['slug'],
-                MEDIUM_INPUT
-            );
-        } else {
-            header('Location: ' . ROOT . '');
-            exit;
-        }
+        // Contrôle les données reçues pour le post
+        FormService::controlData($post, [
+            '1#author# ' . $slug,
+            '1#title#' . $slug
+        ]);
 
-        // Contrôle les données $_POST
-        if (
-            !empty($_POST['title'])
-            && !empty($_POST['text'])
-            && !empty($_POST['lastname'])
-            && !empty($_POST['firstname'])
-        ) {
-            $post->category = 2;
-
-            if (!empty($_SESSION['user']['id'])) {
-                $post->user = $_SESSION['user']['id'];
-            }
-            $post->author
-                = FormService::controlInputText(
-                    $_POST['firstname'],
-                    SHORT_INPUT
-                ) . ' ' . FormService::controlInputText(
-                    $_POST['lastname'],
-                    SHORT_INPUT
-                );
-
+        $post->category = 2;
+        $post->user     = $_SESSION['user']['id'];
+        $post->slug     = Transliterator::urlize(
             $post->title
-                = FormService::controlInputText(
-                    $_POST['title'],
-                    SHORT_INPUT
-                );
+        );
 
-            $post->slug
-                = Transliterator::urlize(
-                    $post->title
-                );
+        // Contrôle les données reçues pour le commentaire
+        FormService::controlData($comment, [
+            '1#text# ' . $slug
+        ]);
 
-            $comment->article = $_POST['article'];
-
-            $comment->text
-                = FormService::controlInputText(
-                    $_POST['text'],
-                    LONG_INPUT
-                );
-        } else {
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs 
-            du formulaire";
-
-            header('Location: ' . ROOT . $slug);
-            exit;
-        }
+        $comment->article = $_POST['article'];
 
         // Ajoute le commentaire
         $newPost = new PostModel();

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UserEntity File Doc Comment
+ * ImageEntity File Doc Comment
  * php version 8.0.0
  * 
  * @category Entity
@@ -14,7 +14,7 @@
 namespace app\entity;
 
 /**
- * UserEntity
+ * ImageEntity
  * 
  * @category Class
  * @package  Blog
@@ -22,12 +22,9 @@ namespace app\entity;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class UserEntity
+class ImageEntity
 {
     public int $id;
-    public string $lastname;
-    public string $firstname;
-    public string $description;
-    public string $email;
-    public string $password;
+    public int $article;
+    public string $url;
 }

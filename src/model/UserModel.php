@@ -17,6 +17,7 @@
 namespace app\model;
 
 use app\entity\UserEntity;
+use app\service\AuthService;
 
 /**
  * UserModel
@@ -60,25 +61,34 @@ class UserModel extends MainModel
 
         $statement = $this->pdo->prepare($sql);
 
-        // Ajoute l'utilisateur ou affiche un message d'erreur
-        if (empty($response->id)) {
+        // Démarre une session
+        AuthService::isActiveSession();
+
+        // Ajoute un nouvel utilisateur
+        if (empty($response)) {
             $statement->execute($user);
 
             $_SESSION['user']['message']
                 = "Merci pour votre inscription, elle est en attente 
-                de validation par l'administrateur du site";
+            de validation par l'administrateur du site";
 
             header('Location: ' . ROOT . 'login');
             exit;
-        } elseif (!empty($response->id) && $response->valid == 0) {
-            $_SESSION['user']['erreur'] = "Votre compte est en attente de 
-            validation par l'administrateur du site";
+        }
 
-            header('Location: ' . ROOT . 'login');
-            exit;
-        } else {
+        // Message d'erreur: compte existant
+        if ($response->valid == 1) {
             $_SESSION['user']['erreur'] = "Utilisateur déjà enregistré, 
             connectez-vous en utilisant le formulaire ci-dessous.";
+
+            header('Location: ' . ROOT . 'login');
+            exit;
+        }
+
+        // Message d'erreur: compte en attente de validation
+        if ($response->valid == 0) {
+            $_SESSION['user']['erreur'] = "Votre compte est en attente de 
+            validation par l'administrateur du site";
 
             header('Location: ' . ROOT . 'login');
             exit;
@@ -88,12 +98,11 @@ class UserModel extends MainModel
     /**
      * Authentifie un utilisateur
      *
-     * @param string $email    email de l'utilisateur
-     * @param string $password mot de passe de l'utilisateur
+     * @param UserEntity $user objet utilisateur
      * 
      * @return void
      */
-    public function logUser(string $email, string $password): void
+    public function logUser(UserEntity $user): void
     {
         // Recherche l'utilisateur par son email
         $sql = "SELECT * FROM user WHERE email = ?";
@@ -101,31 +110,31 @@ class UserModel extends MainModel
         $statement = $this->pdo->prepare($sql);
 
         $statement->execute(
-            [$email]
+            [$user->email]
         );
 
-        $user = $statement->fetch();
+        $response = $statement->fetch();
 
         // Démarre une session
-        session_start();
+        AuthService::isActiveSession();
 
         // Connecte l'utilisateur ou affiche un message d'erreur
         if (
-            isset($user)
-            && !empty($user)
-            && password_verify($password, $user->password)
-            && $user->valid == 1
+            isset($response)
+            && !empty($response)
+            && password_verify($user->password, $response->password)
+            && $response->valid == 1
         ) {
-            $_SESSION['user']['id']        = $user->id;
-            $_SESSION['user']['email']     = $user->email;
-            $_SESSION['user']['firstname'] = $user->firstname;
-            $_SESSION['user']['lastname']  = $user->lastname;
-            $_SESSION['user']['role']      = $user->role;
-            $_SESSION['user']['message']   = "Bienvenue $user->firstname";
+            $_SESSION['user']['id']        = $response->id;
+            $_SESSION['user']['email']     = $response->email;
+            $_SESSION['user']['firstname'] = $response->firstname;
+            $_SESSION['user']['lastname']  = $response->lastname;
+            $_SESSION['user']['role']      = $response->role;
+            $_SESSION['user']['message']   = "Bienvenue $response->firstname";
 
             header('Location: ' . ROOT . 'admin');
             exit;
-        } elseif (!empty($user->id) && $user->valid == 0) {
+        } elseif (!empty($response->id) && $response->valid == 0) {
             $_SESSION['user']['erreur'] = "Votre compte est en attente de 
             validation par l'administrateur du site";
 
@@ -264,11 +273,11 @@ class UserModel extends MainModel
 
             header('Location: ' . ROOT . 'account');
             exit;
-        } else {
-            $_SESSION['user']['erreur'] = "Adresse e-mail déjà utilisée";
-
-            header('Location: ' . ROOT . 'account');
-            exit;
         }
+
+        $_SESSION['user']['erreur'] = "Adresse e-mail déjà utilisée";
+
+        header('Location: ' . ROOT . 'account');
+        exit;
     }
 }

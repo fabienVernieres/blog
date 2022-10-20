@@ -17,6 +17,8 @@
 namespace app\controller;
 
 use app\model\UserModel;
+use app\entity\UserEntity;
+use app\service\AuthService;
 use app\service\FormService;
 use app\service\RenderService;
 
@@ -50,35 +52,18 @@ class LoginController
      */
     public function logIn(): void
     {
-        // Contrôle les données reçues
-        if (
-            $_POST['email']
-            && FormService::isValidEmail($_POST['email'])
-            && $_POST['password']
-        ) {
-            $email = $_POST['email'];
+        $user = new UserEntity;
 
-            $password = FormService::controlInputText(
-                $_POST['password'],
-                SHORT_INPUT
-            );
-        } else {
-            session_start();
-
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs 
-            du formulaire";
-
-            header('Location: ' . ROOT . 'login');
-            exit;
-        }
+        // Contrôle les données $_POST
+        FormService::controlData($user, [
+            '1#email#login',
+            '1#password#login'
+        ]);
 
         // Envoie les données au model
-        $user = new UserModel;
+        $userModel = new UserModel;
 
-        $user->logUser(
-            $email,
-            $password
-        );
+        $userModel->logUser($user);
     }
 
     /**
@@ -89,7 +74,7 @@ class LoginController
     public function logOut(): void
     {
         // Destruction des variables de la session
-        session_start();
+        AuthService::isActiveSession();
 
         session_unset();
 

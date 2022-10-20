@@ -23,6 +23,7 @@ use app\entity\PostEntity;
 use app\service\AuthService;
 use app\service\FormService;
 use app\entity\ArticleEntity;
+use app\entity\LinkEntity;
 use app\service\RenderService;
 use Behat\Transliterator\Transliterator;
 
@@ -116,52 +117,29 @@ class FormController extends AdminController
      */
     public function addArticle(): void
     {
-        $post    = new PostEntity();
-        $article = new stdClass();
+        $post    = new PostEntity;
+        $article = new stdClass;
 
-        // Contrôle les donnes reçues
-        if (
-            !empty($_POST['title'])
-            && !empty($_POST['description'])
-            && !empty($_POST['text'])
-        ) {
-            $post->category = 1;
-            $post->user = $this->_userId;
+        // Contrôle les donnes reçues pour le post
+        FormService::controlData($post, [
+            '1#title#form/add/article',
+            '1#author#form/add/article'
+        ]);
 
-            $post->author = FormService::controlInputText(
-                $_POST['author'],
-                SHORT_INPUT
-            );
+        $post->category = 1;
+        $post->user = $this->_userId;
+        $post->slug = Transliterator::urlize(
+            $post->title
+        );
 
-            $post->title = FormService::controlInputText(
-                $_POST['title'],
-                SHORT_INPUT
-            );
-
-            $post->slug = Transliterator::urlize(
-                $post->title
-            );
-
-            $article->description = FormService::controlInputText(
-                $_POST['description'],
-                MEDIUM_INPUT
-            );
-
-            $article->text
-                = FormService::controlInputText(
-                    $_POST['text'],
-                    LONG_INPUT
-                );
-        } else {
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les 
-            champs du formulaire";
-
-            header('Location: ' . ROOT . 'form/add/article');
-            exit;
-        }
+        // Contrôle les donnes reçues pour l'article
+        FormService::controlData($article, [
+            '1#description#form/add/article',
+            '1#text#form/add/article'
+        ]);
 
         // Ajoute l'article
-        $newPost = new PostModel();
+        $newPost = new PostModel;
 
         $newPost->addPost(
             $post,
@@ -170,7 +148,7 @@ class FormController extends AdminController
         );
 
         // Recherche l'id de l'article
-        $lastPost = new PostModel();
+        $lastPost = new PostModel;
 
         $lastPost = $lastPost->getPost($post->slug);
 
@@ -196,52 +174,26 @@ class FormController extends AdminController
      */
     public function updateArticle(): void
     {
-        $post     = new PostEntity();
-        $article  = new ArticleEntity();
+        $post     = new PostEntity;
+        $article  = new ArticleEntity;
         $id       = $_POST['id'];
         $slug     = $_POST['slug'];
         $category = $_POST['category'];
 
-        // Contrôle les donnes reçues
-        if (
-            !empty($_POST['title'])
-            && !empty($_POST['author'])
-            && !empty($_POST['description'])
-            && !empty($_POST['text'])
-        ) {
-            $post->title
-                = FormService::controlInputText(
-                    $_POST['title'],
-                    SHORT_INPUT
-                );
+        // Contrôle les donnes reçues pour le post
+        FormService::controlData($post, [
+            '1#title#form/update/' . $slug,
+            '1#author#form/update/' . $slug
+        ]);
 
-            $post->author
-                = FormService::controlInputText(
-                    $_POST['author'],
-                    SHORT_INPUT
-                );
-
-            $article->description
-                = FormService::controlInputText(
-                    $_POST['description'],
-                    MEDIUM_INPUT
-                );
-
-            $article->text
-                = FormService::controlInputText(
-                    $_POST['text'],
-                    LONG_INPUT
-                );
-        } else {
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs 
-            du formulaire";
-
-            header('Location: ' . ROOT . 'form/update/' . $slug);
-            exit;
-        }
+        // Contrôle les donnes reçues pour l'article
+        FormService::controlData($article, [
+            '1#description#form/update/' . $slug,
+            '1#text#form/update/' . $slug
+        ]);
 
         // Modifie l'article
-        $newPost = new PostModel();
+        $newPost = new PostModel;
 
         $newPost->updatePost(
             $id,
@@ -276,40 +228,25 @@ class FormController extends AdminController
         $post = new PostEntity;
         $link = new stdClass;
 
-        // Contrôle les donnes reçues
-        if (
-            !empty($_POST['title'])
-            && !empty($_POST['url'])
-        ) {
-            $post->category = 4;
-            $post->user     = $this->_userId;
+        // Contrôle les donnes reçues pour le post
+        FormService::controlData($post, [
+            '1#title#form/add/link'
+        ]);
 
-            $post->title
-                = FormService::controlInputText(
-                    $_POST['title'],
-                    SHORT_INPUT
-                );
+        $post->category = 4;
+        $post->user     = $this->_userId;
+        $post->slug
+            = Transliterator::urlize(
+                $post->title
+            );
 
-            $post->slug
-                = Transliterator::urlize(
-                    $post->title
-                );
-
-            $link->url
-                = FormService::controlInputText(
-                    $_POST['url'],
-                    MEDIUM_INPUT
-                );
-        } else {
-            $_SESSION['user']['erreur']
-                = "Merci de remplir tous les champs du formulaire";
-
-            header('Location: ' . ROOT . 'form/add/link');
-            exit;
-        }
+        // Contrôle les donnes reçues pour le link
+        FormService::controlData($link, [
+            '1#url#form/add/link'
+        ]);
 
         // Ajoute le lien
-        $newPost = new PostModel();
+        $newPost = new PostModel;
 
         $newPost->addPost(
             $post,
@@ -332,8 +269,8 @@ class FormController extends AdminController
     public function updateLink(): void
     {
         // Initie un objet pour le post et pour le lien
-        $post = new PostEntity();
-        $link = new ArticleEntity();
+        $post = new PostEntity;
+        $link = new LinkEntity;
 
         // Identifiants du lien
         $id       = $_POST['id'];
@@ -341,34 +278,18 @@ class FormController extends AdminController
         $category = $_POST['category'];
 
         // Contrôle les donnes reçues
-        if (!empty($_POST['title']) && !empty($_POST['url'])) {
-            $post->title
-                = FormService::controlInputText(
-                    $_POST['title'],
-                    SHORT_INPUT
-                );
+        // Contrôle les donnes reçues pour le post
+        FormService::controlData($post, [
+            '1#title#form/update/' . $slug
+        ]);
 
-            $post->slug
-                = FormService::controlInputText(
-                    $_POST['slug'],
-                    SHORT_INPUT
-                );
-
-            $link->url
-                = FormService::controlInputText(
-                    $_POST['url'],
-                    LONG_INPUT
-                );
-        } else {
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs 
-            du formulaire";
-
-            header('Location: ' . ROOT . 'form/update/' . $slug);
-            exit;
-        }
+        // Contrôle les donnes reçues pour le link
+        FormService::controlData($link, [
+            '1#url#form/update/' . $slug
+        ]);
 
         // Modifie le lien
-        $newPost = new PostModel();
+        $newPost = new PostModel;
 
         $newPost->updatePost(
             $id,
@@ -397,8 +318,8 @@ class FormController extends AdminController
         if (!empty($_FILES["fileToUpload"]["name"])) {
             // Initie $file, $post et $image
             $file           = pathinfo(basename($_FILES["fileToUpload"]["name"]));
-            $post           = new PostEntity();
-            $image          = new stdClass();
+            $post           = new PostEntity;
+            $image          = new stdClass;
             $post->category = 3;
             $post->user     = $this->_userId;
             $post->title
@@ -483,7 +404,7 @@ class FormController extends AdminController
                 ) {
                     $_SESSION['user']['message'] = "Image ajoutée";
 
-                    $newImage = new PostModel();
+                    $newImage = new PostModel;
 
                     $newImage->addPost(
                         $post,

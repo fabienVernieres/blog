@@ -40,11 +40,11 @@ Téléchargez le dossier ZIP du code ou cloner le dépôt sur votre périphériq
 ```text
 #Le contenu sera directement téléchargé dans le répertoire projet
 
-git clone https://github.com/fabienVernieres/blog.git projet
+git clone git@github.com:monDossier projet
 
 #Le contenu sera téléchargé dans le dossier où vous vous situez
 
-git clone https://github.com/fabienVernieres/blog.git .
+git clone git@github.com:monDossier .
 ```
 
 Modifiez le fichier `config.php` à la racine du projet et importez le fichier `db.sql` dans votre base de données pour créer les tables SQL.
@@ -52,25 +52,18 @@ Modifiez le fichier `config.php` à la racine du projet et importez le fichier `
 ```php
 <?php
 // Configuration PHPMailer
-define("EMAIL_ADMIN",       'exemple@domaine.com');
+define("EMAIL_ADMIN",       'votremail@domain.com');
 define("PASSMAIL_ADMIN",    '');
 
-// // Constante ROOT terminée par slash
-define("ROOT", 'https://exemple.domaine.com/');
+// // Constante ROOT terminée par un slash
+define("ROOT", 'https://votredomain/');
 
-// Titre du blog
-define("BLOG_TITLE",              'Nom du Blog');
-
-// Nombre d'articles affichés sur la page d'accueil
+// Autres constantes du blog
+define("BLOG_TITLE",              'Premier Blog');
 define("NUMBER_ITEMS_INDEX_PAGE", 6);
-
-// Nombre d'articles affichés par page actualités
 define("NUMBER_ITEMS_LIST_PAGE",  9);
 
-// Poids maximum autorisé en octet des images (ex: pour 1 Mo = 1000000)
-define("IMAGE_MAX_WEIGHT",  1000000);
-
-// Constantes pour formulaire pour contrôler la taille des chaines de caractères
+// Constantes pour formulaire
 define("MIN_INPUT",    8);
 define("SHORT_INPUT",  30);
 define("MEDIUM_INPUT", 300);
@@ -90,7 +83,7 @@ Il est également nécessaire d'installer `composer` sur le serveur. Un fichier 
 Tapez ensuite la commande suivante sur le terminal de votre serveur:
 
 ```text
-composer update
+composer install
 ```
 
 # Prise en main

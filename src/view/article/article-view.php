@@ -77,8 +77,8 @@ use app\service\AuthService;
                     AuthService::isActiveSession();
                     ?>
 
-                <input type="hidden" name="lastname" value="<?= ($_SESSION['user']['lastname']) ?? '' ?>">
-                <input type="hidden" name="firstname" value="<?= ($_SESSION['user']['firstname']) ?? '' ?>">
+                <input type="hidden" name="author"
+                    value="<?= ($_SESSION['user']['firstname']) ?? '' ?> <?= ($_SESSION['user']['lastname']) ?? '' ?>">
 
                 <div class="row">
                     <div class="mb-3 col-5">

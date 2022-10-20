@@ -25,8 +25,9 @@ namespace app\entity;
 class PostEntity
 {
     public int $id;
-    public string $category;
-    public string $user;
+    public int $category;
+    public int $user;
+    public string $author;
     public string $title;
     public string $slug;
     public string $creationDate;

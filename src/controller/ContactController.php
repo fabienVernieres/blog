@@ -16,6 +16,7 @@
 
 namespace app\controller;
 
+use app\service\AuthService;
 use app\service\FormService;
 use app\service\RenderService;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -78,7 +79,7 @@ class ContactController
                 "\r\n"
             );
         } else {
-            session_start();
+            AuthService::isActiveSession();
 
             $_SESSION['user']['erreur'] = "Merci de remplir tous les champs du formulaire";
 
@@ -93,7 +94,7 @@ class ContactController
         ) {
             $email = $_POST['email'];
         } else {
-            session_start();
+            AuthService::isActiveSession();
 
             $_SESSION['user']['erreur'] = "Adresse e-mail incorrecte";
 
@@ -131,7 +132,7 @@ class ContactController
 
         // Envoie du message
         if ($mail->send()) {
-            session_start();
+            AuthService::isActiveSession();
 
             $_SESSION['user']['message'] = "Merci pour votre message, 
                 nous vous répondrons dans les plus brefs délais.";

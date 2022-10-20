@@ -58,65 +58,18 @@ class RegisterController
         // Initie un objet UserEntity
         $user = new UserEntity();
 
-        session_start();
+        // Contrôle les données reçues pour le profil
 
-        // Contrôle les données $_POST
-        if (
-            !empty($_POST['lastname'])
-            && !empty($_POST['firstname'])
-            && !empty($_POST['description'])
-            && !empty($_POST['password'])
-        ) {
-            $user->lastname = mb_strtoupper(
-                FormService::controlInputText(
-                    $_POST['lastname'],
-                    SHORT_INPUT
-                )
-            );
+        FormService::controlData($user, [
+            '1#lastname#register',
+            '1#firstname#register',
+            '1#description#register',
+            '1#email#register',
+            '1#password#register'
+        ]);
 
-            $user->firstname = ucfirst(
-                mb_strtolower(
-                    FormService::controlInputText(
-                        $_POST['firstname'],
-                        SHORT_INPUT
-                    )
-                )
-            );
-
-            $user->description = FormService::controlInputText(
-                $_POST['description'],
-                LONG_INPUT
-            );
-
-            if (strlen($_POST['password']) < 8) {
-                $_SESSION['user']['erreur'] = "Mot de passe trop court";
-
-                header('Location: ' . ROOT . 'register');
-                exit;
-            }
-
-            $user->password = FormService::hashPassword(
-                $_POST['password']
-            );
-        } else {
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs 
-            du formulaire";
-
-            header('Location: ' . ROOT . 'register');
-            exit;
-        }
-
-        if (
-            !empty($_POST['email'])
-            && FormService::isValidEmail($_POST['email'])
-        ) {
-            $user->email = $_POST['email'];
-        } else {
-            $_SESSION['user']['erreur'] = "Adresse e-mail incorrecte";
-
-            header('Location: ' . ROOT . 'register');
-            exit;
-        }
+        // On hash le password
+        $user->password = FormService::hashPassword($user->password);
 
         // Ajoute l'utilisateur
         $newUser = new UserModel();
