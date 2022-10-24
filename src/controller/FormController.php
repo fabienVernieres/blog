@@ -126,11 +126,11 @@ class FormController extends AdminController
             '1#author#form/add/article'
         ]);
 
-        $post->category = 1;
-        $post->user = $this->_userId;
-        $post->slug = Transliterator::urlize(
-            $post->title
-        );
+        $post->setCategory(1);
+        $post->setUser($this->_userId);
+        $post->setSlug(Transliterator::urlize(
+            $post->getTitle()
+        ));
 
         // Contrôle les donnes reçues pour l'article
         FormService::controlData($article, [
@@ -150,7 +150,7 @@ class FormController extends AdminController
         // Recherche l'id de l'article
         $lastPost = new PostModel;
 
-        $lastPost = $lastPost->getPost($post->slug);
+        $lastPost = $lastPost->getPost($post->getSlug());
 
         // Ajoute l'image liée à l'article
         if (!empty($_FILES["fileToUpload"]["name"])) {
@@ -233,12 +233,13 @@ class FormController extends AdminController
             '1#title#form/add/link'
         ]);
 
-        $post->category = 4;
-        $post->user     = $this->_userId;
-        $post->slug
-            = Transliterator::urlize(
-                $post->title
-            );
+        $post->setCategory(4);
+        $post->setUser($this->_userId);
+        $post->setSlug(
+            Transliterator::urlize(
+                $post->getTitle()
+            )
+        );
 
         // Contrôle les donnes reçues pour le link
         FormService::controlData($link, [
@@ -320,28 +321,30 @@ class FormController extends AdminController
             $file           = pathinfo(basename($_FILES["fileToUpload"]["name"]));
             $post           = new PostEntity;
             $image          = new stdClass;
-            $post->category = 3;
-            $post->user     = $this->_userId;
-            $post->title
+            $post->setCategory(3);
+            $post->setUser($this->_userId);
+            $title
                 = (!empty($imageName))
                 ? $imageName : 'avatar';
+            $post->setTitle($title);
 
             // Ajoute l'id de l'utilisateur au début du slug de l'image
-            $post->slug = $this->_userId . '-'
+            $slug = $this->_userId . '-'
                 . Transliterator::urlize($file['filename']);
 
             // Si l'image est liée à un article, 
             // on ajoute le numéro de ce dernier à la fin du slug
-            $post->slug
+            $slug
                 = (!empty($article))
-                ? $post->slug . '-' . $article : $post->slug;
+                ? $slug . '-' . $article : $slug;
+            $post->setSlug($slug);
 
             $image->article
                 = (!empty($article))
                 ? $article : null;
 
             // Nom complet du fichier
-            $image->url = $post->slug . '.' . $file['extension'];
+            $image->url = $post->getSlug() . '.' . $file['extension'];
 
             // Dossier de destination
             $target_dir = 'upload/';

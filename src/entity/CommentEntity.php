@@ -24,8 +24,90 @@ namespace app\entity;
  */
 class CommentEntity
 {
-    public int $id;
-    public int $article;
-    public string $text;
-    public bool $valid;
+    private int $_id;
+    private int $_article;
+    private string $_text;
+    private bool $_valid;
+
+    /**
+     * Get the value of id
+     * 
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->_id;
+    }
+
+    /**
+     * Get the value of article
+     * 
+     * @return int
+     */
+    public function getArticle(): int
+    {
+        return $this->_article;
+    }
+
+    /**
+     * Set the value of article
+     * 
+     * @param int $article id de l'article commenté
+     *
+     * @return self
+     */
+    public function setArticle($article)
+    {
+        $this->_article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of text
+     * 
+     * @return string
+     */
+    public function getText(): string
+    {
+        return $this->_text;
+    }
+
+    /**
+     * Set the value of text
+     * 
+     * @param string $text texte du commentaire
+     *
+     * @return self
+     */
+    public function setText($text)
+    {
+        $this->_text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of valid
+     * 
+     * @return int
+     */
+    public function getValid(): int
+    {
+        return $this->_valid;
+    }
+
+    /**
+     * Set the value of valid
+     * 
+     * @param int $valid prend la valeur de 0 ou 1 pour un commentaire validé
+     *
+     * @return self
+     */
+    public function setValid($valid)
+    {
+        $this->_valid = $valid;
+
+        return $this;
+    }
 }

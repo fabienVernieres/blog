@@ -56,7 +56,7 @@ class RegisterController
     public function controlDataUser(): void
     {
         // Initie un objet UserEntity
-        $user = new UserEntity();
+        $user = new UserEntity;
 
         // Contrôle les données reçues pour le profil
 
@@ -69,10 +69,10 @@ class RegisterController
         ]);
 
         // On hash le password
-        $user->password = FormService::hashPassword($user->password);
+        $user->setPassword(FormService::hashPassword($user->getPassword()));
 
         // Ajoute l'utilisateur
-        $newUser = new UserModel();
+        $newUser = new UserModel;
 
         $newUser->addUser($user);
     }

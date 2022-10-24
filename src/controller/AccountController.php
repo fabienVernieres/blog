@@ -104,7 +104,7 @@ class AccountController
     public function update(): void
     {
         // Initie un objet UserEntity
-        $profile = new UserEntity();
+        $profile = new UserEntity;
 
         // Contrôle les données reçues pour le profil
         FormService::controlData($profile, [
@@ -116,7 +116,7 @@ class AccountController
         ]);
 
         // On hash le password
-        $profile->password = FormService::hashPassword($profile->password);
+        $profile->setPassword(FormService::hashPassword($profile->getPassword()));
 
         // Tout est ok, met à jour le profil
         $user = new UserModel;

@@ -19,6 +19,7 @@ namespace app\model;
 use stdClass;
 use app\entity\PostEntity;
 use app\service\AuthService;
+use app\entity\ArticleEntity;
 
 /**
  * PostModel
@@ -69,7 +70,7 @@ class PostModel extends MainModel
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute(
-            ['slug' => $post->slug . '%']
+            ['slug' => $post->getSlug() . '%']
         );
 
         $response = $stmt->fetch();
@@ -84,13 +85,14 @@ class PostModel extends MainModel
 
             $responseId = end($responseArray);
 
-            $post->slug
-                .= (is_numeric($responseId))
+            $slug = $post->getSlug();
+            $slug .= (is_numeric($responseId))
                 ? '-' . ($responseId + 1) :  '-2';
+            $post->setSlug($slug);
         }
 
         // Insère le post
-        $post = get_object_vars($post);
+        $post = $post->getObjVars();
 
         $sql = self::insertArray(
             'post',
@@ -359,7 +361,7 @@ class PostModel extends MainModel
      */
     public function updatePost(int $id, string $category, PostEntity $post, $article): void
     {
-        $post = get_object_vars($post);
+        $post = $post->getObjVars();
 
         $sql = self::updateArray(
             'post',
@@ -372,7 +374,7 @@ class PostModel extends MainModel
 
         $statement->execute($post);
 
-        $article = get_object_vars($article);
+        $article = $article->getObjVars();
 
         $sql = self::updateArray(
             $category,

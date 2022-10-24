@@ -40,7 +40,7 @@ class UserModel extends MainModel
     public function addUser(UserEntity $user): void
     {
         // Retourne les propriétés de l'objet sous forme de tableau associatif
-        $user = get_object_vars($user);
+        $user = $user->getObjVars();
 
         // Vérifie si l'email n'est pas déjà utilisée
         $sql = "SELECT id,valid FROM user  WHERE email = ?";
@@ -110,7 +110,7 @@ class UserModel extends MainModel
         $statement = $this->pdo->prepare($sql);
 
         $statement->execute(
-            [$user->email]
+            [$user->getEmail()]
         );
 
         $response = $statement->fetch();
@@ -122,7 +122,7 @@ class UserModel extends MainModel
         if (
             isset($response)
             && !empty($response)
-            && password_verify($user->password, $response->password)
+            && password_verify($user->getPassword(), $response->password)
             && $response->valid == 1
         ) {
             $_SESSION['user']['id']        = $response->id;
@@ -246,7 +246,7 @@ class UserModel extends MainModel
         $statement->execute(
             [
                 'id' => $id,
-                'email' => $profile->email
+                'email' => $profile->getEmail()
             ]
         );
 
@@ -254,9 +254,7 @@ class UserModel extends MainModel
 
         if ($response === false) {
 
-            $profile = get_object_vars(
-                $profile
-            );
+            $profile = $profile->getObjVars();
 
             $sql = self::updateArray(
                 'user',

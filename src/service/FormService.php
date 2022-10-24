@@ -115,8 +115,13 @@ class FormService
             self::dataFilter($data[1]);
 
             // On assigne la donnée à la propriété de l'objet
-            $objectProperty = $data[1];
-            $object->$objectProperty = self::$_data;
+            $objectSetter = 'set' . ucfirst($data[1]);
+            if (method_exists($object, $objectSetter)) {
+                $object->$objectSetter(self::$_data);
+            } else {
+                $objectProperty = $data[1];
+                $object->$objectProperty = self::$_data;
+            }
 
             // Si la donnée est obligatoire mais manquante
             if ($data[0] == 1) {

@@ -24,6 +24,58 @@ namespace app\entity;
  */
 class LinkEntity
 {
-    public int $id;
-    public string $url;
+    private int $_id;
+    private string $_url;
+
+    /**
+     * Get the value of id
+     * 
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->_id;
+    }
+
+    /**
+     * Get the value of url
+     * 
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->_url;
+    }
+
+    /**
+     * Set the value of url
+     * 
+     * @param string $url url du lien
+     *
+     * @return self
+     */
+    public function setUrl($url)
+    {
+        $this->_url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Retourne les propriétés d'un objet en tableau associatif
+     *
+     * @return array
+     */
+    public function getObjVars(): array
+    {
+        $array = get_object_vars($this);
+
+        foreach ($array as $key => $value) {
+            $newKey = substr($key, 1);
+            $array[$newKey] = $value;
+            unset($array[$key]);
+        }
+
+        return $array;
+    }
 }

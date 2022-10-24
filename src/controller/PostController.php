@@ -127,8 +127,8 @@ class PostController
     public function comment(): void
     {
         // Initie PostEntity et stdClass
-        $post = new PostEntity();
-        $comment = new stdClass();
+        $post = new PostEntity;
+        $comment = new stdClass;
         AuthService::isActiveSession();
 
         $slug = $_POST['slug'];
@@ -139,11 +139,11 @@ class PostController
             '1#title#' . $slug
         ]);
 
-        $post->category = 2;
-        $post->user     = $_SESSION['user']['id'];
-        $post->slug     = Transliterator::urlize(
-            $post->title
-        );
+        $post->setCategory(2);
+        $post->setUser($_SESSION['user']['id']);
+        $post->setSlug(Transliterator::urlize(
+            $post->getTitle()
+        ));
 
         // Contrôle les données reçues pour le commentaire
         FormService::controlData($comment, [
