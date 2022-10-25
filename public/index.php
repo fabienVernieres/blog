@@ -1,12 +1,12 @@
 <?php
 require '../config.php';
 
-use app\Router;
+use app\service\RouterService;
 
 require '../vendor/autoload.php';
 
 $router
-    = new Router();
+    = new RouterService();
 
 $router->addRoute('accueil',        '',         'Index#index#:param');
 $router->addRoute('actualités',     'list',     'Post#list#:param');

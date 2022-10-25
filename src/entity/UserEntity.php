@@ -58,7 +58,7 @@ class UserEntity
      *
      * @return self
      */
-    public function setLastname($lastname)
+    public function setLastname(string $lastname): self
     {
         $this->_lastname = $lastname;
 
@@ -82,7 +82,7 @@ class UserEntity
      *
      * @return self
      */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname): self
     {
         $this->_firstname = $firstname;
 
@@ -106,7 +106,7 @@ class UserEntity
      *
      * @return self
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->_description = $description;
 
@@ -130,7 +130,7 @@ class UserEntity
      *
      * @return self
      */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->_email = $email;
 
@@ -154,7 +154,7 @@ class UserEntity
      *
      * @return self
      */
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->_password = $password;
 

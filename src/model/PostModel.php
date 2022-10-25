@@ -19,7 +19,6 @@ namespace app\model;
 use stdClass;
 use app\entity\PostEntity;
 use app\service\AuthService;
-use app\entity\ArticleEntity;
 
 /**
  * PostModel
@@ -336,7 +335,8 @@ class PostModel extends MainModel
         AuthService::isActiveSession();
 
         if (
-            $zone === 'admin'
+            $response == false
+            || $zone === 'admin'
             && $response->user !== $_SESSION['user']['id']
         ) {
             header('Location: ' . ROOT . '');

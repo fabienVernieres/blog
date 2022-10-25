@@ -15,7 +15,7 @@
  * @link     https://blog.fabienvernieres.com
  */
 
-namespace app;
+namespace app\service;
 
 /**
  * Router
@@ -26,7 +26,7 @@ namespace app;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class Router
+class RouterService
 {
     /**
      * Contrôleur

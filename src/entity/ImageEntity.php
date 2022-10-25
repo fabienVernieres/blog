@@ -55,7 +55,7 @@ class ImageEntity
      *
      * @return self
      */
-    public function setArticle($article)
+    public function setArticle(int $article): self
     {
         $this->_article = $article;
 
@@ -79,7 +79,7 @@ class ImageEntity
      *
      * @return self
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->_url = $url;
 

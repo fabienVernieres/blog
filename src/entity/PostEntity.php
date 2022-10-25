@@ -59,7 +59,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setCategory($category)
+    public function setCategory(int $category): self
     {
         $this->_category = $category;
 
@@ -83,7 +83,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setUser($user)
+    public function setUser(int $user): self
     {
         $this->_user = $user;
 
@@ -107,7 +107,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author): self
     {
         $this->_author = $author;
 
@@ -131,7 +131,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->_title = $title;
 
@@ -155,7 +155,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug): self
     {
         $this->_slug = $slug;
 
@@ -179,7 +179,7 @@ class PostEntity
      *
      * @return self
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(string $creationDate): self
     {
         $this->_creationDate = $creationDate;
 

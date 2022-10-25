@@ -54,7 +54,7 @@ class LinkEntity
      *
      * @return self
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->_url = $url;
 

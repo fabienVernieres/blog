@@ -56,7 +56,7 @@ class CommentEntity
      *
      * @return self
      */
-    public function setArticle($article)
+    public function setArticle(int $article): self
     {
         $this->_article = $article;
 
@@ -80,7 +80,7 @@ class CommentEntity
      *
      * @return self
      */
-    public function setText($text)
+    public function setText(string $text): self
     {
         $this->_text = $text;
 
@@ -104,7 +104,7 @@ class CommentEntity
      *
      * @return self
      */
-    public function setValid($valid)
+    public function setValid(int $valid): self
     {
         $this->_valid = $valid;
 

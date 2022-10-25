@@ -11,7 +11,7 @@
  * @link     https://blog.fabienvernieres.com
  */
 
-namespace App\Service;
+namespace app\service;
 
 use app\service\AuthService;
 use App\Service\FormService as ServiceFormService;

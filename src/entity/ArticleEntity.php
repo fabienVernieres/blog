@@ -56,7 +56,7 @@ class ArticleEntity
      *
      * @return self
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->_description = $description;
 
@@ -80,7 +80,7 @@ class ArticleEntity
      *
      * @return self
      */
-    public function setText($text)
+    public function setText(string $text): self
     {
         $this->_text = $text;
 
@@ -104,7 +104,7 @@ class ArticleEntity
      *
      * @return self
      */
-    public function setUpdateDate($updateDate)
+    public function setUpdateDate(string $updateDate): self
     {
         $this->_updateDate = $updateDate;
 
