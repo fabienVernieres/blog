@@ -51,6 +51,8 @@ class AccountController
      */
     public function __construct()
     {
+        AuthService::startSession();
+        $this->session = AuthService::getSession();
         $this->_userId = AuthService::isUser('user');
     }
 

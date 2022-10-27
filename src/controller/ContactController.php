@@ -30,7 +30,7 @@ use PHPMailer\PHPMailer\PHPMailer;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class ContactController
+class ContactController extends MainController
 {
     /**
      * Affiche le formulaire de contact
@@ -64,9 +64,7 @@ class ContactController
             || empty($firstname)
             || empty($message)
         ) {
-            AuthService::isActiveSession();
-
-            $_SESSION['user']['erreur'] = "Merci de remplir tous les champs du formulaire";
+            AuthService::updateSession('erreur', 'Merci de remplir tous les champs du formulaire');
 
             header('Location: ' . ROOT . 'contact');
         }
@@ -93,9 +91,7 @@ class ContactController
         // Contrôle l'adresse email
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         if (!FormService::isValidEmail($_POST['email'])) {
-            AuthService::isActiveSession();
-
-            $_SESSION['user']['erreur'] = "Adresse e-mail incorrecte";
+            AuthService::updateSession('erreur', 'Adresse e-mail incorrecte');
 
             header('Location: ' . ROOT . 'contact');
         }
@@ -137,10 +133,8 @@ class ContactController
 
             // Envoie du message
             if ($mail->send()) {
-                AuthService::isActiveSession();
-
-                $_SESSION['user']['message'] = "Merci pour votre message, 
-                nous vous répondrons dans les plus brefs délais.";
+                AuthService::updateSession('message', 'Merci pour votre message, 
+                nous vous répondrons dans les plus brefs délais.');
 
                 header('Location: ' . ROOT . 'contact');
             } else {

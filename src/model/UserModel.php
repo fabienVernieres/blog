@@ -61,16 +61,12 @@ class UserModel extends MainModel
 
         $statement = $this->pdo->prepare($sql);
 
-        // Démarre une session
-        AuthService::isActiveSession();
-
         // Ajoute un nouvel utilisateur
         if (empty($response)) {
             $statement->execute($user);
 
-            $_SESSION['user']['message']
-                = "Merci pour votre inscription, elle est en attente 
-            de validation par l'administrateur du site";
+            AuthService::updateSession('message', 'Merci pour votre inscription, elle est en attente 
+            de validation par l\'administrateur du site');
 
             header('Location: ' . ROOT . 'login');
             exit;
@@ -78,8 +74,8 @@ class UserModel extends MainModel
 
         // Message d'erreur: compte existant
         if ($response->valid == 1) {
-            $_SESSION['user']['erreur'] = "Utilisateur déjà enregistré, 
-            connectez-vous en utilisant le formulaire ci-dessous.";
+            AuthService::updateSession('erreur', 'Utilisateur déjà enregistré, 
+            connectez-vous en utilisant le formulaire ci-dessous.');
 
             header('Location: ' . ROOT . 'login');
             exit;
@@ -87,8 +83,8 @@ class UserModel extends MainModel
 
         // Message d'erreur: compte en attente de validation
         if ($response->valid == 0) {
-            $_SESSION['user']['erreur'] = "Votre compte est en attente de 
-            validation par l'administrateur du site";
+            AuthService::updateSession('erreur', 'Votre compte est en attente de 
+            validation par l\'administrateur du site.');
 
             header('Location: ' . ROOT . 'login');
             exit;
@@ -115,9 +111,6 @@ class UserModel extends MainModel
 
         $response = $statement->fetch();
 
-        // Démarre une session
-        AuthService::isActiveSession();
-
         // Connecte l'utilisateur ou affiche un message d'erreur
         if (
             isset($response)
@@ -125,23 +118,25 @@ class UserModel extends MainModel
             && password_verify($user->getPassword(), $response->password)
             && $response->valid == 1
         ) {
-            $_SESSION['user']['id']        = $response->id;
-            $_SESSION['user']['email']     = $response->email;
-            $_SESSION['user']['firstname'] = $response->firstname;
-            $_SESSION['user']['lastname']  = $response->lastname;
-            $_SESSION['user']['role']      = $response->role;
-            $_SESSION['user']['message']   = "Bienvenue $response->firstname";
+            $this->session['user']['id']        = $response->id;
+            $this->session['user']['email']     = $response->email;
+            $this->session['user']['firstname'] = $response->firstname;
+            $this->session['user']['lastname']  = $response->lastname;
+            $this->session['user']['role']      = $response->role;
+            $this->session['user']['message']   = "Bienvenue $response->firstname";
+
+            AuthService::setSession($this->session);
 
             header('Location: ' . ROOT . 'admin');
             exit;
         } elseif (!empty($response->id) && $response->valid == 0) {
-            $_SESSION['user']['erreur'] = "Votre compte est en attente de 
-            validation par l'administrateur du site";
+            AuthService::updateSession('erreur', 'Votre compte est en attente de 
+            validation par l\'administrateur du site.');
 
             header('Location: ' . ROOT . 'login');
             exit;
         } else {
-            $_SESSION['user']['erreur'] = "E-mail ou mot de passe invalide.";
+            AuthService::updateSession('erreur', 'E-mail ou mot de passe invalide.');
 
             header('Location: ' . ROOT . 'login');
             exit;
@@ -238,6 +233,8 @@ class UserModel extends MainModel
      */
     public function updateUser(int $id, UserEntity $profile): void
     {
+        $session = AuthService::getSession();
+
         // Vérifie si l'email n'est pas utilisé par un autre utilisateur
         $sql = "SELECT * FROM user WHERE id != :id AND email = :email";
 
@@ -267,13 +264,13 @@ class UserModel extends MainModel
 
             $statement->execute($profile);
 
-            $_SESSION['user']['message'] = "Profile modifié avec succés";
+            AuthService::updateSession('message', 'Profile modifié avec succés');
 
             header('Location: ' . ROOT . 'account');
             exit;
         }
 
-        $_SESSION['user']['erreur'] = "Adresse e-mail déjà utilisée";
+        AuthService::updateSession('erreur', 'Adresse e-mail déjà utilisée');
 
         header('Location: ' . ROOT . 'account');
         exit;

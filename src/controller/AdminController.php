@@ -30,14 +30,14 @@ use app\service\RenderService;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class AdminController
+class AdminController extends MainController
 {
     /**
      * ID de l'utilisateur
      * 
      * @var int
      * */
-    private $_userId = '';
+    private $_userId;
 
     /**
      * __construct
@@ -46,6 +46,8 @@ class AdminController
      */
     public function __construct()
     {
+        AuthService::startSession();
+        $this->session = AuthService::getSession();
         $this->_userId = AuthService::isUser('admin');
     }
 
@@ -189,7 +191,7 @@ class AdminController
             ? 'account#links' : $category;
 
         // Message de confirmation et redirection sur l'url de destination
-        $_SESSION['user']['message'] = "Suppression confirmée";
+        AuthService::updateSession('message', 'Suppression confirmée');
 
         header('Location: ' . ROOT . $category);
         exit;
@@ -220,7 +222,7 @@ class AdminController
             ? '' : '/' . $post->category;
 
         // Message de confirmation et redirection sur l'url de destination
-        $_SESSION['user']['message'] = "Publication confirmée";
+        AuthService::updateSession('message', 'Publication confirmée');
 
         header('Location: ' . ROOT . 'admin' . $category);
         exit;
@@ -263,7 +265,7 @@ class AdminController
         $user->validUser($id);
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Validation confirmée";
+        AuthService::updateSession('message', 'Validation confirmée');
 
         header('Location: ' . ROOT . 'admin/users');
         exit;
@@ -284,7 +286,7 @@ class AdminController
         $user->deleteUser($id);
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Suppression confirmée";
+        AuthService::updateSession('message', 'Suppression confirmée');
 
         header('Location: ' . ROOT . 'admin/users');
         exit;

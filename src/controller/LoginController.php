@@ -31,7 +31,7 @@ use app\service\RenderService;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class LoginController
+class LoginController extends MainController
 {
     /**
      * Affiche le formulaire de connexion
@@ -74,7 +74,7 @@ class LoginController
     public function logOut(): void
     {
         // Destruction des variables de la session
-        AuthService::isActiveSession();
+        AuthService::startSession();
 
         session_unset();
 

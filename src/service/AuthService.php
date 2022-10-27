@@ -24,6 +24,57 @@ namespace app\service;
  */
 class AuthService
 {
+    private static array $_session;
+
+
+    /**
+     * Démarre une session si aucune active
+     *
+     * @return void
+     */
+    public static function startSession()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        self::$_session = filter_var_array($_SESSION);
+    }
+
+    /**
+     * Get the value of _session
+     * 
+     * @return array
+     */
+    public static function getSession(): array
+    {
+        return self::$_session;
+    }
+
+    /**
+     * Set the value of _session
+     * 
+     * @param array $session 
+     * 
+     * @return void
+     */
+    public static function setSession(array $session): void
+    {
+        $_SESSION = $session;
+    }
+
+    /**
+     * Update Session
+     *
+     * @param string $type    Message de confirmation ou d'erreur
+     * @param string $message Le message
+     * 
+     * @return void
+     */
+    public static function updateSession(string $type, string $message): void
+    {
+        $_SESSION['user'][$type] = $message;
+    }
+
     /**
      * Vérifie si l'utilisateur est un utilisateur enregistré 
      * et contrôle son rôle
@@ -34,10 +85,8 @@ class AuthService
      */
     public static function isUser(string $role): ?int
     {
-        self::isActiveSession();
-
-        if (isset($_SESSION['user']['id'])) {
-            $roles = explode(',', $_SESSION['user']['role']);
+        if (isset(self::$_session['user']['id'])) {
+            $roles = explode(',', self::$_session['user']['role']);
             if (!in_array($role, $roles)) {
                 header('Location: ' . ROOT . '');
                 exit;
@@ -46,7 +95,8 @@ class AuthService
             header('Location: ' . ROOT . '');
             exit;
         }
-        return $_SESSION['user']['id'];
+
+        return intval(self::$_session['user']['id']);
     }
 
     /**
@@ -57,27 +107,15 @@ class AuthService
     public static function isAdmin(): bool
     {
         if (
-            isset($_SESSION['user']['id'])
-            && isset($_SESSION['user']['email'])
+            isset(self::$_session['user']['id'])
+            && isset(self::$_session['user']['email'])
         ) {
             $roles
-                = explode(',', $_SESSION['user']['role']);
+                = explode(',', self::$_session['user']['role']);
             if (in_array('admin', $roles)) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * Démarre une session si aucune active
-     *
-     * @return void
-     */
-    public static function isActiveSession()
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
     }
 }

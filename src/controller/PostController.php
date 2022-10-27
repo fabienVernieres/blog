@@ -34,7 +34,7 @@ use Behat\Transliterator\Transliterator;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class PostController
+class PostController extends MainController
 {
     /**
      * Liste d'articles
@@ -129,7 +129,6 @@ class PostController
         // Initie PostEntity et stdClass
         $post = new PostEntity;
         $comment = new stdClass;
-        AuthService::isActiveSession();
 
         $slug = $_POST['slug'];
 
@@ -162,8 +161,8 @@ class PostController
         );
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Merci pour votre commentaire, il 
-        sera approuvé avant publication";
+        AuthService::updateSession('message', 'Merci pour votre commentaire, il 
+        sera approuvé avant publication');
 
         header('Location: ' . ROOT . $slug);
         exit;

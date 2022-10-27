@@ -1,9 +1,4 @@
-<?php
-
-use App\Service\AuthService;
-?>
-
-<?php if (AuthService::isAdmin()) : ?>
+<?php if ($isAdmin == 1) : ?>
 
 <?php require '../src/view/admin/header.php'; ?>
 
@@ -24,15 +19,15 @@ use App\Service\AuthService;
         <h2>Vos informations</h2>
 
         <?php
-        if (isset($_SESSION['user']['erreur'])) {
-            echo '<div class="alert alert-danger mt-3" role="alert">' . $_SESSION['user']['erreur'] . '</div>';
-            unset($_SESSION['user']['erreur']);
+        if (isset($session['user']['erreur'])) {
+            echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
+            unset($session['user']['erreur']);
         }
         ?>
 
-        <?php if (isset($_SESSION['user']['message'])) {
-            echo '<div class="alert alert-success mt-3" role="alert">' . $_SESSION['user']['message'] . '</div>';
-            unset($_SESSION['user']['message']);
+        <?php if (isset($session['user']['message'])) {
+            echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
+            unset($session['user']['message']);
         }
         ?>
 
@@ -80,7 +75,7 @@ use App\Service\AuthService;
             </div>
         </form>
 
-        <?php if (AuthService::isAdmin()) : ?>
+        <?php if ($isAdmin == 1) : ?>
 
         <?php require 'avatar.php'; ?>
 

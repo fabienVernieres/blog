@@ -1,10 +1,3 @@
-<?php
-
-use app\service\AuthService;
-
-AuthService::isActiveSession();
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -78,7 +71,7 @@ AuthService::isActiveSession();
 
     <footer class="py-3 my-4 container">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <?php if (AuthService::isAdmin()) : ?>
+            <?php if ($isAdmin == 1) : ?>
             <li class="nav-item">
                 <a href="<?= ROOT ?>admin" class="nav-link px-2 text-light">Administration</a>
             </li>

@@ -122,9 +122,10 @@ class FormService
             if ($data[0] == 1) {
                 $dataNeeded = $_POST[$data[1]];
                 if (!isset($dataNeeded) || empty($dataNeeded)) {
-                    AuthService::isActiveSession();
-                    $_SESSION['user']['erreur'] = 'Merci de remplir tous les 
-                    champs du formulaire';
+                    AuthService::startSession();
+                    AuthService::updateSession('erreur', 'Merci de remplir tous les 
+                    champs du formulaire');
+
                     header('Location: ' . ROOT . $data[2]);
                     exit;
                 }
@@ -132,8 +133,8 @@ class FormService
 
             // Si la donnée renvoie un message d'erreur lors du traitement
             if (isset(self::$_errorMessage)) {
-                AuthService::isActiveSession();
-                $_SESSION['user']['erreur'] = self::$_errorMessage;
+                AuthService::startSession();
+                AuthService::updateSession('erreur', self::$_errorMessage);
                 header('Location: ' . ROOT . $data[2]);
                 exit;
             }

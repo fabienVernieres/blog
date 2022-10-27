@@ -1,8 +1,3 @@
-<?php
-
-use app\service\AuthService;
-?>
-
 <div class="pt-4 bg-primary pb-3">
     <div class="container">
         <h1 class="blog-post-title mb-3 text-light"><?= $object1->title ?></h1>
@@ -14,15 +9,15 @@ use app\service\AuthService;
     <div class="container">
         <div>
 
-            <?php if (isset($_SESSION['user']['erreur'])) {
-                echo '<div class="alert alert-danger mt-3" role="alert">' . $_SESSION['user']['erreur'] . '</div>';
-                unset($_SESSION['user']['erreur']);
+            <?php if (isset($session['user']['erreur'])) {
+                echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
+                unset($session['user']['erreur']);
             }
             ?>
 
-            <?php if (isset($_SESSION['user']['message'])) {
-                echo '<div class="alert alert-success mt-3" role="alert">' . $_SESSION['user']['message'] . '</div>';
-                unset($_SESSION['user']['message']);
+            <?php if (isset($session['user']['message'])) {
+                echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
+                unset($session['user']['message']);
             }
             ?>
 
@@ -66,19 +61,15 @@ use app\service\AuthService;
             <?php endif; ?>
         </div>
 
-        <?php if ((isset($_SESSION['user']['id'])) && !empty(($_SESSION['user']['id']))) : ?>
+        <?php if ((isset($session['user']['id'])) && !empty(($session['user']['id']))) : ?>
         <div class=" bg-light px-3 col-md-8">
             <h5 class="pt-2">Laisser un commentaire</h5>
             <form action="<?= ROOT ?>post/comment" method="post">
                 <input type="hidden" name="article" value="<?= $object1->id ?>">
                 <input type="hidden" name="slug" value="<?= $object1->slug ?>">
 
-                <?php
-                    AuthService::isActiveSession();
-                    ?>
-
                 <input type="hidden" name="author"
-                    value="<?= ($_SESSION['user']['firstname']) ?? '' ?> <?= ($_SESSION['user']['lastname']) ?? '' ?>">
+                    value="<?= ($session['user']['firstname']) ?? '' ?> <?= ($session['user']['lastname']) ?? '' ?>">
 
                 <div class="row">
                     <div class="mb-3 col-5">

@@ -4,16 +4,15 @@
             <div class="row align-items-center g-lg-5 py-5">
 
                 <?php
-                session_start();
-                if (isset($_SESSION['user']['erreur'])) {
-                    echo '<div class="alert alert-danger mt-3" role="alert">' . $_SESSION['user']['erreur'] . '</div>';
-                    unset($_SESSION['user']['erreur']);
+                if (isset($session['user']['erreur'])) {
+                    echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
+                    unset($session['user']['erreur']);
                 }
                 ?>
 
-                <?php if (isset($_SESSION['user']['message'])) {
-                    echo '<div class="alert alert-success mt-3" role="alert">' . $_SESSION['user']['message'] . '</div>';
-                    unset($_SESSION['user']['message']);
+                <?php if (isset($session['user']['message'])) {
+                    echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
+                    unset($session['user']['message']);
                 }
                 ?>
 

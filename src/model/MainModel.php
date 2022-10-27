@@ -16,6 +16,8 @@
 
 namespace app\model;
 
+use app\service\AuthService;
+
 /**
  * MainModel
  * 
@@ -38,6 +40,8 @@ abstract class MainModel
     public function __construct()
     {
         $this->pdo = self::getconnection();
+        AuthService::startSession();
+        $this->session = AuthService::getSession();
     }
 
     /**

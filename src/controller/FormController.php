@@ -19,11 +19,11 @@ namespace app\controller;
 
 use stdClass;
 use app\model\PostModel;
+use app\entity\LinkEntity;
 use app\entity\PostEntity;
 use app\service\AuthService;
 use app\service\FormService;
 use app\entity\ArticleEntity;
-use app\entity\LinkEntity;
 use app\service\RenderService;
 use Behat\Transliterator\Transliterator;
 
@@ -39,19 +39,21 @@ use Behat\Transliterator\Transliterator;
 class FormController extends AdminController
 {
     /**
-     * Id de l'utilisateur
+     * ID de l'utilisateur
      * 
      * @var int
-     */
-    private $_userId = '';
+     * */
+    private $_userId;
 
     /**
-     * Vérifie si l'utilisateur est un administrateur
+     * __construct
      *
      * @return void
      */
     public function __construct()
     {
+        AuthService::startSession();
+        $this->session = AuthService::getSession();
         $this->_userId = AuthService::isUser('admin');
     }
 
@@ -162,7 +164,7 @@ class FormController extends AdminController
         }
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Post ajouté";
+        AuthService::updateSession('message', 'Post ajouté');
 
         header('Location: ' . ROOT . 'admin');
         exit;
@@ -212,7 +214,7 @@ class FormController extends AdminController
         }
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Post modifié";
+        AuthService::updateSession('message', 'Post modifié');
 
         header('Location: ' . ROOT . 'admin');
         exit;
@@ -257,7 +259,7 @@ class FormController extends AdminController
         );
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Lien ajouté";
+        AuthService::updateSession('message', 'Lien ajouté');
 
         header('Location: ' . ROOT . 'account#links');
         exit;
@@ -301,7 +303,7 @@ class FormController extends AdminController
         );
 
         // Message de confirmation et redirection
-        $_SESSION['user']['message'] = "Lien modifié";
+        AuthService::updateSession('message', 'Lien modifié');
 
         header('Location: ' . ROOT . 'account#links');
         exit;
@@ -367,7 +369,7 @@ class FormController extends AdminController
                 if ($check !== false) {
                     $uploadOk = 1;
                 } else {
-                    $_SESSION['user']['erreur'] = "Mauvais format de fichier.";
+                    AuthService::updateSession('erreur', 'Mauvais format de fichier.');
 
                     $uploadOk = 0;
                 }
@@ -375,13 +377,14 @@ class FormController extends AdminController
 
             // Vérifie si le fichier existe déjà
             if (file_exists($target_file)) {
-                $_SESSION['user']['erreur'] = "Image déjà enregistrée.";
+                AuthService::updateSession('erreur', 'Image déjà enregistrée.');
+
                 $uploadOk = 0;
             }
 
             // Contrôle le poids de l'image
             if ($fileToUpLoad["size"] > IMAGE_MAX_WEIGHT) {
-                $_SESSION['user']['erreur'] = "Votre image est trop volumineuse.";
+                AuthService::updateSession('erreur', 'Votre image est trop volumineuse.');
 
                 $uploadOk = 0;
             }
@@ -393,9 +396,9 @@ class FormController extends AdminController
                 && $imageFileType != "jpeg"
                 && $imageFileType != "gif"
             ) {
-                $_SESSION['user']['erreur'] = "Désolé, votre image doit 
+                AuthService::updateSession('erreur', 'Désolé, votre image doit 
                 être de format JPG, JPEG, PNG ou GIF. Les autres formats 
-                sont refusés.";
+                sont refusés.');
 
                 $uploadOk = 0;
             }
@@ -408,7 +411,7 @@ class FormController extends AdminController
                         $target_file
                     )
                 ) {
-                    $_SESSION['user']['message'] = "Image ajoutée";
+                    AuthService::updateSession('message', 'Image ajoutée');
 
                     $newImage = new PostModel;
 
@@ -418,8 +421,8 @@ class FormController extends AdminController
                         'image'
                     );
                 } else {
-                    $_SESSION['user']['erreur'] = "Désolé, votre image n'a 
-                    pu être téléchargé.";
+                    AuthService::updateSession('erreur', 'Désolé, votre image n\'a 
+                    pu être téléchargé.');
                 }
             }
 
@@ -428,7 +431,7 @@ class FormController extends AdminController
                 exit;
             }
         } else {
-            $_SESSION['user']['erreur'] = "Aucun fichier choisi";
+            AuthService::updateSession('erreur', 'Aucun fichier choisi');
 
             header('Location: ' . ROOT . 'account');
             exit;

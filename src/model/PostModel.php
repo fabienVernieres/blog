@@ -332,12 +332,10 @@ class PostModel extends MainModel
 
         $response = $statement->fetch();
 
-        AuthService::isActiveSession();
-
         if (
             $response == false
             || $zone === 'admin'
-            && $response->user !== $_SESSION['user']['id']
+            && $response->user !== $this->session['user']['id']
         ) {
             header('Location: ' . ROOT . '');
             exit;

@@ -29,14 +29,18 @@ class RenderService
      *
      * @param string $path      nom de la vue
      * @param string $pageTitle titre de la page
-     * @param object $object1    paramètre 1
-     * @param object $object2    paramètre 2
-     * @param object $object3    paramètre 3
+     * @param object $object1   paramètre 1
+     * @param object $object2   paramètre 2
+     * @param object $object3   paramètre 3
      * 
      * @return void
      */
     public static function render(string $path, string $pageTitle = null, $object1 = null, $object2 = null, $object3 = null)
     {
+        AuthService::startSession();
+        $session = AuthService::getSession();
+        $isAdmin = AuthService::isAdmin();
+
         $file = '../src/view/' .  $path . '-view.php';
 
         if (file_exists($file)) {
@@ -51,5 +55,7 @@ class RenderService
             header('Location: ' . ROOT . '');
             exit;
         }
+        unset($_SESSION['user']['message']);
+        unset($_SESSION['user']['erreur']);
     }
 }

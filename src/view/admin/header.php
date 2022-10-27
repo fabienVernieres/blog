@@ -37,14 +37,14 @@
         </div>
 
         <div class="col-xl-10 col-md-9 pt-3 ps-4 pb-5">
-            <?php if (isset($_SESSION['user']['erreur'])) {
-                echo '<div class="alert alert-danger mt-3" role="alert">' . $_SESSION['user']['erreur'] . '</div>';
-                unset($_SESSION['user']['erreur']);
+            <?php if (isset($session['user']['erreur'])) {
+                echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
+                unset($session['user']['erreur']);
             }
             ?>
 
-            <?php if (isset($_SESSION['user']['message'])) {
-                echo '<div class="alert alert-success mt-3" role="alert">' . $_SESSION['user']['message'] . '</div>';
-                unset($_SESSION['user']['message']);
+            <?php if (isset($session['user']['message'])) {
+                echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
+                unset($session['user']['message']);
             }
             ?>
