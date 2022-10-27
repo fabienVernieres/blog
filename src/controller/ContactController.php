@@ -54,9 +54,9 @@ class ContactController
      */
     public function send(): void
     {
-        $lastname = $_POST['lastname'];
-        $firstname = $_POST['firstname'];
-        $message = $_POST['message'];
+        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Contrôle les données $_POST
         if (

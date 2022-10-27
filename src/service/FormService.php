@@ -51,7 +51,7 @@ class FormService
      */
     public static function controlInputText(string $text, int $length): string
     {
-        return htmlspecialchars(
+        return
             strip_tags(
                 trim(
                     substr(
@@ -60,9 +60,7 @@ class FormService
                         $length
                     )
                 )
-            ),
-            ENT_QUOTES
-        );
+            );
     }
 
     /**
@@ -155,19 +153,21 @@ class FormService
     {
         switch ($data) {
             case 'lastname':
+                $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = mb_strtoupper(
                     self::controlInputText(
-                        $_POST['lastname'],
+                        $lastname,
                         SHORT_INPUT
                     )
                 );
                 break;
 
             case 'firstname':
+                $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = ucfirst(
                     mb_strtolower(
                         FormService::controlInputText(
-                            $_POST['firstname'],
+                            $firstname,
                             SHORT_INPUT
                         )
                     )
@@ -175,8 +175,9 @@ class FormService
                 break;
 
             case 'description':
+                $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = FormService::controlInputText(
-                    $_POST['description'],
+                    $description,
                     MEDIUM_INPUT
                 );
                 break;
@@ -189,36 +190,41 @@ class FormService
                 break;
 
             case 'password':
-                self::$_data = $_POST['password'];
+                $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+                self::$_data = $password;
                 if (strlen(self::$_data) < 8) {
                     self::$_errorMessage = 'Mot de passe trop court';
                 }
                 break;
 
             case 'title':
+                $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = self::controlInputText(
-                    $_POST['title'],
+                    $title,
                     SHORT_INPUT
                 );
                 break;
 
             case 'author':
+                $author = filter_input(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = self::controlInputText(
-                    $_POST['author'],
+                    $author,
                     SHORT_INPUT
                 );
                 break;
 
             case 'text':
+                $text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = self::controlInputText(
-                    $_POST['text'],
+                    $text,
                     LONG_INPUT
                 );
                 break;
 
             case 'url':
+                $url = filter_input(INPUT_POST, 'url', FILTER_SANITIZE_SPECIAL_CHARS);
                 self::$_data = self::controlInputText(
-                    $_POST['url'],
+                    $url,
                     MEDIUM_INPUT
                 );
                 break;
