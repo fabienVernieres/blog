@@ -153,7 +153,8 @@ class FormController extends AdminController
         $lastPost = $lastPost->getPost($post->getSlug());
 
         // Ajoute l'image liée à l'article
-        if (!empty($_FILES["fileToUpload"]["name"])) {
+        $file = $_FILES["fileToUpload"]["name"];
+        if (!empty($file)) {
             $this->addImage(
                 $lastPost->id,
                 'image'
@@ -316,9 +317,11 @@ class FormController extends AdminController
      */
     public function addImage(string $article = null, string $imageName = null): void
     {
-        if (!empty($_FILES["fileToUpload"]["name"])) {
+        $fileToUpLoad = $_FILES["fileToUpload"];
+
+        if (!empty($fileToUpLoad)) {
             // Initie $file, $post et $image
-            $file           = pathinfo(basename($_FILES["fileToUpload"]["name"]));
+            $file           = pathinfo(basename($fileToUpLoad["name"]));
             $post           = new PostEntity;
             $image          = new stdClass;
             $post->setCategory(3);
@@ -359,7 +362,7 @@ class FormController extends AdminController
             // Vérifie si le fichier est une image
             if (isset($_POST["submit"])) {
                 $check
-                    = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                    = getimagesize($fileToUpLoad["tmp_name"]);
 
                 if ($check !== false) {
                     $uploadOk = 1;
@@ -377,7 +380,7 @@ class FormController extends AdminController
             }
 
             // Contrôle le poids de l'image
-            if ($_FILES["fileToUpload"]["size"] > IMAGE_MAX_WEIGHT) {
+            if ($fileToUpLoad["size"] > IMAGE_MAX_WEIGHT) {
                 $_SESSION['user']['erreur'] = "Votre image est trop volumineuse.";
 
                 $uploadOk = 0;
@@ -401,7 +404,7 @@ class FormController extends AdminController
             if ($uploadOk == 1) {
                 if (
                     move_uploaded_file(
-                        $_FILES["fileToUpload"]["tmp_name"],
+                        $fileToUpLoad["tmp_name"],
                         $target_file
                     )
                 ) {

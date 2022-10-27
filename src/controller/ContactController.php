@@ -54,25 +54,29 @@ class ContactController
      */
     public function send(): void
     {
+        $lastname = $_POST['lastname'];
+        $firstname = $_POST['firstname'];
+        $message = $_POST['message'];
+
         // Contrôle les données $_POST
         if (
-            !empty($_POST['lastname'])
-            && !empty($_POST['firstname'])
-            && !empty($_POST['message'])
+            !empty($lastname)
+            && !empty($firstname)
+            && !empty($message)
         ) {
             $lastname = FormService::controlInputText(
-                $_POST['lastname'],
+                $lastname,
                 SHORT_INPUT
             );
 
             $firstname = FormService::controlInputText(
-                $_POST['firstname'],
+                $firstname,
                 SHORT_INPUT
             );
 
             $message = wordwrap(
                 FormService::controlInputText(
-                    $_POST['message'],
+                    $message,
                     LONG_INPUT
                 ),
                 70,

@@ -183,14 +183,14 @@ class FormService
 
             case 'email':
                 self::$_data = $_POST['email'];
-                if (!self::isValidEmail($_POST['email'])) {
+                if (!self::isValidEmail(self::$_data)) {
                     self::$_errorMessage = 'Adresse e-mail incorrecte';
                 }
                 break;
 
             case 'password':
                 self::$_data = $_POST['password'];
-                if (strlen($_POST['password']) < 8) {
+                if (strlen(self::$_data) < 8) {
                     self::$_errorMessage = 'Mot de passe trop court';
                 }
                 break;
