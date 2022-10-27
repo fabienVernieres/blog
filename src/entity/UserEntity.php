@@ -30,6 +30,8 @@ class UserEntity
     private string $_description;
     private string $_email;
     private string $_password;
+    private string $_role;
+    private int $_valid;
 
     /**
      * Get the value of id
@@ -157,6 +159,50 @@ class UserEntity
     public function setPassword(string $password): self
     {
         $this->_password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _role
+     * 
+     * @return string
+     */
+    public function get_role(): string
+    {
+        return $this->_role;
+    }
+
+    /**
+     * Set the value of _role
+     *
+     * @return  self
+     */
+    public function set_role($_role): self
+    {
+        $this->_role = $_role;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _valid
+     * 
+     * @return int
+     */
+    public function get_valid(): int
+    {
+        return $this->_valid;
+    }
+
+    /**
+     * Set the value of _valid
+     *
+     * @return  self
+     */
+    public function set_valid($_valid): self
+    {
+        $this->_valid = $_valid;
 
         return $this;
     }
