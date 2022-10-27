@@ -442,8 +442,8 @@ class PostModel extends MainModel
             ['category' => $category]
         );
 
-        $this->numberPosts = floatval($stmt->rowCount());
+        $this->_numberPosts = floatval($stmt->rowCount());
 
-        return floor($this->numberPosts / NUMBER_ITEMS_LIST_PAGE);
+        return floor($this->_numberPosts / NUMBER_ITEMS_LIST_PAGE);
     }
 }

@@ -14,7 +14,6 @@
 namespace app\service;
 
 use app\service\AuthService;
-use App\Service\FormService as ServiceFormService;
 
 /**
  * FormService
@@ -72,9 +71,7 @@ class FormService
      */
     public static function isValidEmail(string $email): bool
     {
-        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-        return (filter_var($email, FILTER_VALIDATE_EMAIL));
+        return (filter_var($email, FILTER_SANITIZE_EMAIL));
     }
 
     /**
@@ -123,7 +120,8 @@ class FormService
 
             // Si la donnée est obligatoire mais manquante
             if ($data[0] == 1) {
-                if (!isset($_POST[$data[1]]) || empty($_POST[$data[1]])) {
+                $dataNeeded = $_POST[$data[1]];
+                if (!isset($dataNeeded) || empty($dataNeeded)) {
                     AuthService::isActiveSession();
                     $_SESSION['user']['erreur'] = 'Merci de remplir tous les 
                     champs du formulaire';
@@ -183,7 +181,7 @@ class FormService
                 break;
 
             case 'email':
-                self::$_data = $_POST['email'];
+                self::$_data = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
                 if (!self::isValidEmail(self::$_data)) {
                     self::$_errorMessage = 'Adresse e-mail incorrecte';
                 }

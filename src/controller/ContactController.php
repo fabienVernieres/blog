@@ -54,98 +54,99 @@ class ContactController
      */
     public function send(): void
     {
-        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_SPECIAL_CHARS);
+        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_SPECIAL_CHARS);
+        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Contrôle les données $_POST
         if (
-            !empty($lastname)
-            && !empty($firstname)
-            && !empty($message)
+            empty($lastname)
+            || empty($firstname)
+            || empty($message)
         ) {
-            $lastname = FormService::controlInputText(
-                $lastname,
-                SHORT_INPUT
-            );
-
-            $firstname = FormService::controlInputText(
-                $firstname,
-                SHORT_INPUT
-            );
-
-            $message = wordwrap(
-                FormService::controlInputText(
-                    $message,
-                    LONG_INPUT
-                ),
-                70,
-                "\r\n"
-            );
-        } else {
             AuthService::isActiveSession();
 
             $_SESSION['user']['erreur'] = "Merci de remplir tous les champs du formulaire";
 
             header('Location: ' . ROOT . 'contact');
-            exit;
         }
 
+        $lastname = FormService::controlInputText(
+            $lastname,
+            SHORT_INPUT
+        );
+
+        $firstname = FormService::controlInputText(
+            $firstname,
+            SHORT_INPUT
+        );
+
+        $message = wordwrap(
+            FormService::controlInputText(
+                $message,
+                LONG_INPUT
+            ),
+            70,
+            "\r\n"
+        );
+
         // Contrôle l'adresse email
-        if (
-            !empty($_POST['email'])
-            && FormService::isValidEmail($_POST['email'])
-        ) {
-            $email = $_POST['email'];
-        } else {
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        if (!FormService::isValidEmail($_POST['email'])) {
             AuthService::isActiveSession();
 
             $_SESSION['user']['erreur'] = "Adresse e-mail incorrecte";
 
             header('Location: ' . ROOT . 'contact');
-            exit;
         }
 
-        // Initie PHPMailer
-        $mail = new PHPMailer(true);
+        // Envoie du mail
+        if (
+            !empty($lastname)
+            && !empty($firstname)
+            && !empty($message)
+            && FormService::isValidEmail($_POST['email'])
+        ) {
+            // Initie PHPMailer
+            $mail = new PHPMailer(true);
 
-        // Paramètre du serveur
-        $mail->isSMTP();
-        $mail->Host =       'smtp.gmail.com';
-        $mail->SMTPAuth =   'true';
-        $mail->SMTPSecure = 'tls';
-        $mail->Port =       '587';
-        $mail->Username =   EMAIL_ADMIN;
-        $mail->Password =   PASSMAIL_ADMIN;
+            // Paramètre du serveur
+            $mail->isSMTP();
+            $mail->Host =       'smtp.gmail.com';
+            $mail->SMTPAuth =   'true';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port =       '587';
+            $mail->Username =   EMAIL_ADMIN;
+            $mail->Password =   PASSMAIL_ADMIN;
 
-        // Destinataire
-        $mail->setFrom(EMAIL_ADMIN);
+            // Destinataire
+            $mail->setFrom(EMAIL_ADMIN);
 
-        $mail->addAddress(EMAIL_ADMIN);
+            $mail->addAddress(EMAIL_ADMIN);
 
-        // Contenu du message
-        $mail->CharSet = PHPMailer::CHARSET_UTF8;
+            // Contenu du message
+            $mail->CharSet = PHPMailer::CHARSET_UTF8;
 
-        $mail->Subject = 'Nouveau message';
+            $mail->Subject = 'Nouveau message';
 
-        $mail->Body = <<<EOT
-        Email: $email
-        Name: $lastname $firstname
-        Message: $message
-        EOT;
+            $mail->Body = <<<EOT
+            Email: $email
+            Name: $lastname $firstname
+            Message: $message
+            EOT;
 
-        // Envoie du message
-        if ($mail->send()) {
-            AuthService::isActiveSession();
+            // Envoie du message
+            if ($mail->send()) {
+                AuthService::isActiveSession();
 
-            $_SESSION['user']['message'] = "Merci pour votre message, 
+                $_SESSION['user']['message'] = "Merci pour votre message, 
                 nous vous répondrons dans les plus brefs délais.";
 
-            header('Location: ' . ROOT . 'contact');
-            exit;
-        } else {
-            echo $mail->ErrorInfo;
+                header('Location: ' . ROOT . 'contact');
+            } else {
+                echo $mail->ErrorInfo;
+            }
+            $mail->smtpClose();
         }
-        $mail->smtpClose();
     }
 }

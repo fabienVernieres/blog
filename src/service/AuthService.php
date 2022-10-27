@@ -46,7 +46,7 @@ class AuthService
             header('Location: ' . ROOT . '');
             exit;
         }
-        return $userId = $_SESSION['user']['id'];
+        return $_SESSION['user']['id'];
     }
 
     /**
