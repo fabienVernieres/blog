@@ -29,6 +29,11 @@ use app\service\AuthService;
  */
 class MainController
 {
+    /** 
+     * Session de l'utilisateur
+     * 
+     * @var array 
+     */
     protected array $session;
 
     /**

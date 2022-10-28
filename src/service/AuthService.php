@@ -81,22 +81,22 @@ class AuthService
      *
      * @param string $role rôle de l'utilisateur
      * 
-     * @return int
+     * @return void
      */
-    public static function isUser(string $role): ?int
+    public static function isUser(string $role): void
     {
-        if (isset(self::$_session['user']['id'])) {
+        if (isset(self::$_session['user'])) {
             $roles = explode(',', self::$_session['user']['role']);
             if (!in_array($role, $roles)) {
                 header('Location: ' . ROOT . '');
                 exit;
             }
-        } else {
+        }
+
+        if (!isset(self::$_session['user'])) {
             header('Location: ' . ROOT . '');
             exit;
         }
-
-        return intval(self::$_session['user']['id']);
     }
 
     /**
@@ -106,16 +106,12 @@ class AuthService
      */
     public static function isAdmin(): bool
     {
-        if (
-            isset(self::$_session['user']['id'])
-            && isset(self::$_session['user']['email'])
-        ) {
-            $roles
-                = explode(',', self::$_session['user']['role']);
-            if (in_array('admin', $roles)) {
-                return true;
-            }
+        // tableau des rôles de l'utilisateur
+        $roles = [];
+
+        if (!empty(self::$_session['user']['role'])) {
+            $roles = explode(',', self::$_session['user']['role']);
         }
-        return false;
+        return in_array('admin', $roles);
     }
 }

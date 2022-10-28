@@ -129,13 +129,17 @@ class UserModel extends MainModel
 
             header('Location: ' . ROOT . 'admin');
             exit;
-        } elseif (!empty($response->id) && $response->valid == 0) {
+        }
+
+        if (!empty($response->id) && $response->valid == 0) {
             AuthService::updateSession('erreur', 'Votre compte est en attente de 
             validation par l\'administrateur du site.');
 
             header('Location: ' . ROOT . 'login');
             exit;
-        } else {
+        }
+
+        if (empty($response->id) || !password_verify($user->getPassword(), $response->password)) {
             AuthService::updateSession('erreur', 'E-mail ou mot de passe invalide.');
 
             header('Location: ' . ROOT . 'login');
@@ -233,8 +237,6 @@ class UserModel extends MainModel
      */
     public function updateUser(int $id, UserEntity $profile): void
     {
-        $session = AuthService::getSession();
-
         // Vérifie si l'email n'est pas utilisé par un autre utilisateur
         $sql = "SELECT * FROM user WHERE id != :id AND email = :email";
 

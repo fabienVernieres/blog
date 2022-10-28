@@ -1,16 +1,17 @@
 <div class="pt-4 bg-light pb-5">
 
     <div class="container">
-        <?php
-        if (isset($session['user']['erreur'])) {
-            echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
-        }
-        ?>
+        <?php if (isset($session['user']['erreur'])) : ?>
+        <div class="alert alert-danger mt-3" role="alert">
+            <?= $session['user']['erreur'] ?>
+        </div>
+        <?php endif; ?>
 
-        <?php if (isset($session['user']['message'])) {
-            echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
-        }
-        ?>
+        <?php if (isset($session['user']['message'])) : ?>
+        <div class="alert alert-success mt-3" role="alert">
+            <?= $session['user']['message'] ?>
+        </div>
+        <?php endif; ?>
 
         <form action="<?= ROOT ?>contact/send" method="post">
             <div class="card col-md-8">

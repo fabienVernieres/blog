@@ -36,6 +36,24 @@ use Behat\Transliterator\Transliterator;
  */
 class PostController extends MainController
 {
+    /** 
+     * Session de l'utilisateur
+     * 
+     * @var array 
+     */
+    protected array $session;
+
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        AuthService::startSession();
+        $this->session = AuthService::getSession();
+    }
+
     /**
      * Liste d'articles
      *
@@ -134,22 +152,22 @@ class PostController extends MainController
 
         // Contrôle les données reçues pour le post
         FormService::controlData($post, [
-            '1#author# ' . $slug,
+            '1#author#' . $slug,
             '1#title#' . $slug
         ]);
 
         $post->setCategory(2);
-        $post->setUser($_SESSION['user']['id']);
+        $post->setUser($this->session['user']['id']);
         $post->setSlug(Transliterator::urlize(
             $post->getTitle()
         ));
 
         // Contrôle les données reçues pour le commentaire
         FormService::controlData($comment, [
-            '1#text# ' . $slug
+            '1#text#' . $slug
         ]);
 
-        $comment->article = $_POST['article'];
+        $comment->article = filter_input(INPUT_POST, 'article');
 
         // Ajoute le commentaire
         $newPost = new PostModel();

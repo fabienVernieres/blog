@@ -3,18 +3,19 @@
         <div class="col-xl-12 col-xxl-12 px-2 py-2">
             <div class="row align-items-center g-lg-5 py-5">
 
-                <?php
-                if (isset($session['user']['erreur'])) {
-                    echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
-                    unset($session['user']['erreur']);
-                }
-                ?>
+                <?php if (isset($session['user']['erreur'])) : ?>
+                <div class="alert alert-danger mt-3" role="alert">
+                    <?= $session['user']['erreur'] ?>
+                </div>
+                <?php unset($session['user']['erreur']); ?>
+                <?php endif; ?>
 
-                <?php if (isset($session['user']['message'])) {
-                    echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
-                    unset($session['user']['message']);
-                }
-                ?>
+                <?php if (isset($session['user']['message'])) : ?>
+                <div class="alert alert-success mt-3" role="alert">
+                    <?= $session['user']['message'] ?>
+                </div>
+                <?php unset($session['user']['message']); ?>
+                <?php endif; ?>
 
                 <div class="col-lg-7 text-center text-lg-start text-light">
                     <h1 class="display-4 fw-bold lh-1 mb-3"><?= $pageTitle ?></h1>

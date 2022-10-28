@@ -39,7 +39,8 @@ class RegisterController
      */
     public function index(): void
     {
-        if (isset($_POST['register'])) {
+        $register = filter_input(INPUT_POST, 'register');
+        if (isset($register)) {
             $this->controlDataUser();
         } else {
             RenderService::render(

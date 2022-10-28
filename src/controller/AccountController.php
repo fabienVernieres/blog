@@ -35,15 +35,8 @@ use app\service\RenderService;
  * @license  "https://blog.fabienvernieres.com/ GNU/GPLv3"
  * @link     https://blog.fabienvernieres.com
  */
-class AccountController
+class AccountController extends MainController
 {
-    /** 
-     * ID de l'utilisateur
-     * 
-     * @var int 
-     */
-    private $_userId;
-
     /**
      * __construct
      *
@@ -53,7 +46,7 @@ class AccountController
     {
         AuthService::startSession();
         $this->session = AuthService::getSession();
-        $this->_userId = AuthService::isUser('user');
+        AuthService::isUser('user');
     }
 
     /**
@@ -66,14 +59,14 @@ class AccountController
         // Le profil
         $user = new UserModel;
 
-        $user = $user->getUser($this->_userId);
+        $user = $user->getUser($this->session['user']['id']);
 
         //Son avatar
         $avatarModel = new AvatarModel;
 
         $avatar
-            = (!empty($avatarModel->get($this->_userId)))
-            ? $avatarModel->get($this->_userId) : '';
+            = (!empty($avatarModel->get($this->session['user']['id'])))
+            ? $avatarModel->get($this->session['user']['id']) : '';
 
         // Ses liens internet
         $links = new PostModel;
@@ -83,7 +76,7 @@ class AccountController
             null,
             null,
             'admin',
-            $this->_userId,
+            $this->session['user']['id'],
             null
         );
 
@@ -122,6 +115,6 @@ class AccountController
 
         // Tout est ok, met à jour le profil
         $user = new UserModel;
-        $user = $user->updateUser($this->_userId, $profile);
+        $user = $user->updateUser($this->session['user']['id'], $profile);
     }
 }

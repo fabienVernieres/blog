@@ -9,17 +9,17 @@
     <div class="container">
         <div>
 
-            <?php if (isset($session['user']['erreur'])) {
-                echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
-                unset($session['user']['erreur']);
-            }
-            ?>
+            <?php if (isset($session['user']['erreur'])) : ?>
+            <div class="alert alert-danger mt-3" role="alert">
+                <?= $session['user']['erreur'] ?>
+            </div>
+            <?php endif; ?>
 
-            <?php if (isset($session['user']['message'])) {
-                echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
-                unset($session['user']['message']);
-            }
-            ?>
+            <?php if (isset($session['user']['message'])) : ?>
+            <div class="alert alert-success mt-3" role="alert">
+                <?= $session['user']['message'] ?>
+            </div>
+            <?php endif; ?>
 
             <p class="fw-semibold fs-5 text-secondary"><?= $object1->description ?></p>
             <p class="blog-post-meta text-secondary"><small>Posté le <?= $object1->creationDate ?>

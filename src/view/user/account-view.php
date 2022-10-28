@@ -1,4 +1,4 @@
-<?php if ($isAdmin == 1) : ?>
+<?php if ($isAdmin === true) : ?>
 
 <?php require '../src/view/admin/header.php'; ?>
 
@@ -18,18 +18,17 @@
 
         <h2>Vos informations</h2>
 
-        <?php
-        if (isset($session['user']['erreur'])) {
-            echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
-            unset($session['user']['erreur']);
-        }
-        ?>
+        <?php if (isset($session['user']['erreur'])) : ?>
+        <div class="alert alert-danger mt-3" role="alert">
+            <?= $session['user']['erreur'] ?>
+        </div>
+        <?php endif; ?>
 
-        <?php if (isset($session['user']['message'])) {
-            echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
-            unset($session['user']['message']);
-        }
-        ?>
+        <?php if (isset($session['user']['message'])) : ?>
+        <div class="alert alert-success mt-3" role="alert">
+            <?= $session['user']['message'] ?>
+        </div>
+        <?php endif; ?>
 
         <form action="<?= ROOT ?>account/update" method="post">
             <div class="row">
@@ -75,7 +74,7 @@
             </div>
         </form>
 
-        <?php if ($isAdmin == 1) : ?>
+        <?php if ($isAdmin === true) : ?>
 
         <?php require 'avatar.php'; ?>
 

@@ -12,18 +12,17 @@
             Inscrivez-vous et participez à la vie du blog en commentant les articles publiés.
         </p>
 
-        <?php
-        if (isset($session['user']['erreur'])) {
-            echo '<div class="alert alert-danger mt-3" role="alert">' . $session['user']['erreur'] . '</div>';
-            unset($session['user']['erreur']);
-        }
-        ?>
+        <?php if (isset($session['user']['erreur'])) : ?>
+        <div class="alert alert-danger mt-3" role="alert">
+            <?= $session['user']['erreur'] ?>
+        </div>
+        <?php endif; ?>
 
-        <?php if (isset($session['user']['message'])) {
-            echo '<div class="alert alert-success mt-3" role="alert">' . $session['user']['message'] . '</div>';
-            unset($session['user']['message']);
-        }
-        ?>
+        <?php if (isset($session['user']['message'])) : ?>
+        <div class="alert alert-success mt-3" role="alert">
+            <?= $session['user']['message'] ?>
+        </div>
+        <?php endif; ?>
 
         <div class="container bg-light pt-3 ps-4 pb-5">
             <form action="<?= ROOT ?>register/controlDataUser" method="post">

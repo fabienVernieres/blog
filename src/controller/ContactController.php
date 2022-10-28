@@ -90,7 +90,7 @@ class ContactController extends MainController
 
         // Contrôle l'adresse email
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        if (!FormService::isValidEmail($_POST['email'])) {
+        if (!FormService::isValidEmail($email)) {
             AuthService::updateSession('erreur', 'Adresse e-mail incorrecte');
 
             header('Location: ' . ROOT . 'contact');
@@ -101,7 +101,7 @@ class ContactController extends MainController
             !empty($lastname)
             && !empty($firstname)
             && !empty($message)
-            && FormService::isValidEmail($_POST['email'])
+            && FormService::isValidEmail($email)
         ) {
             // Initie PHPMailer
             $mail = new PHPMailer(true);

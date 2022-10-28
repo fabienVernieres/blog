@@ -39,13 +39,6 @@ use Behat\Transliterator\Transliterator;
 class FormController extends AdminController
 {
     /**
-     * ID de l'utilisateur
-     * 
-     * @var int
-     * */
-    private $_userId;
-
-    /**
      * __construct
      *
      * @return void
@@ -54,7 +47,7 @@ class FormController extends AdminController
     {
         AuthService::startSession();
         $this->session = AuthService::getSession();
-        $this->_userId = AuthService::isUser('admin');
+        AuthService::isUser('admin');
     }
 
     /**
@@ -129,7 +122,7 @@ class FormController extends AdminController
         ]);
 
         $post->setCategory(1);
-        $post->setUser($this->_userId);
+        $post->setUser($this->session['user']['id']);
         $post->setSlug(Transliterator::urlize(
             $post->getTitle()
         ));
@@ -155,8 +148,7 @@ class FormController extends AdminController
         $lastPost = $lastPost->getPost($post->getSlug());
 
         // Ajoute l'image liée à l'article
-        $file = $_FILES["fileToUpload"]["name"];
-        if (!empty($file)) {
+        if (isset($_FILES) && !empty($_FILES)) {
             $this->addImage(
                 $lastPost->id,
                 'image'
@@ -179,9 +171,9 @@ class FormController extends AdminController
     {
         $post     = new PostEntity;
         $article  = new ArticleEntity;
-        $id       = $_POST['id'];
-        $slug     = $_POST['slug'];
-        $category = $_POST['category'];
+        $id = filter_input(INPUT_POST, 'id');
+        $slug = filter_input(INPUT_POST, 'slug');
+        $category = filter_input(INPUT_POST, 'category');
 
         // Contrôle les donnes reçues pour le post
         FormService::controlData($post, [
@@ -237,7 +229,7 @@ class FormController extends AdminController
         ]);
 
         $post->setCategory(4);
-        $post->setUser($this->_userId);
+        $post->setUser($this->session['user']['id']);
         $post->setSlug(
             Transliterator::urlize(
                 $post->getTitle()
@@ -319,22 +311,24 @@ class FormController extends AdminController
      */
     public function addImage(string $article = null, string $imageName = null): void
     {
-        $fileToUpLoad = $_FILES["fileToUpload"];
+        if (isset($_FILES) && !empty($_FILES)) {
+            $fileToUpLoad = $_FILES["fileToUpload"];
+        }
 
-        if (!empty($fileToUpLoad)) {
+        if (!empty($fileToUpLoad["name"])) {
             // Initie $file, $post et $image
             $file           = pathinfo(basename($fileToUpLoad["name"]));
             $post           = new PostEntity;
             $image          = new stdClass;
             $post->setCategory(3);
-            $post->setUser($this->_userId);
+            $post->setUser($this->session['user']['id']);
             $title
                 = (!empty($imageName))
                 ? $imageName : 'avatar';
             $post->setTitle($title);
 
             // Ajoute l'id de l'utilisateur au début du slug de l'image
-            $slug = $this->_userId . '-'
+            $slug = $this->session['user']['id'] . '-'
                 . Transliterator::urlize($file['filename']);
 
             // Si l'image est liée à un article, 
@@ -430,7 +424,9 @@ class FormController extends AdminController
                 header('Location: ' . ROOT . 'account#avatar');
                 exit;
             }
-        } else {
+        }
+
+        if (empty($article) && empty($fileToUpLoad["name"])) {
             AuthService::updateSession('erreur', 'Aucun fichier choisi');
 
             header('Location: ' . ROOT . 'account');

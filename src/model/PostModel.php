@@ -134,14 +134,13 @@ class PostModel extends MainModel
                     $zone = "WHERE post.user = $userId";
                 }
                 // Début et limite de recherche pour la pagination
+                $limit = '';
                 if ($number !== null) {
                     $start
                         = ($start > 0)
                         ? (($start - 1) * $number) : '0';
 
                     $limit = "LIMIT $start , $number";
-                } else {
-                    $limit = '';
                 }
 
                 $sql = "SELECT post.id AS id, 

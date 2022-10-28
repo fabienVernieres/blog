@@ -33,13 +33,6 @@ use app\service\RenderService;
 class AdminController extends MainController
 {
     /**
-     * ID de l'utilisateur
-     * 
-     * @var int
-     * */
-    private $_userId;
-
-    /**
      * __construct
      *
      * @return void
@@ -48,7 +41,7 @@ class AdminController extends MainController
     {
         AuthService::startSession();
         $this->session = AuthService::getSession();
-        $this->_userId = AuthService::isUser('admin');
+        AuthService::isUser('admin');
     }
 
     /**
@@ -66,7 +59,7 @@ class AdminController extends MainController
             null,
             null,
             'admin',
-            $this->_userId,
+            $this->session['user']['id'],
             null
         );
 
@@ -95,7 +88,7 @@ class AdminController extends MainController
             null,
             null,
             'admin',
-            $this->_userId,
+            $this->session['user']['id'],
             null
         );
 
@@ -124,7 +117,7 @@ class AdminController extends MainController
             null,
             null,
             'admin',
-            $this->_userId,
+            $this->session['user']['id'],
             null
         );
 

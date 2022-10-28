@@ -82,7 +82,7 @@
             <label for="author" class="form-label">Auteur</label>
             <input type="text" class="form-control" name="author" maxlength="<?= SHORT_INPUT ?>"
                 aria-describedby="authorHelp"
-                value="<?= (!empty($object1)) ? $object1->author : $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname']; ?>">
+                value="<?= (!empty($object1)) ? $object1->author : $session['user']['firstname'] . ' ' . $session['user']['lastname']; ?>">
             <div id="authorHelp" class="form-text"><?= SHORT_INPUT ?> caractères maximum</div>
         </div>
     </div>
