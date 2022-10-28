@@ -1,5 +1,7 @@
 # Projet Blog en PHP
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c57e8e56eb1346aea85de0f08c8f1785)](https://app.codacy.com/gh/fabienVernieres/blog?utm_source=github.com&utm_medium=referral&utm_content=fabienVernieres/blog&utm_campaign=Badge_Grade_Settings)
+
 ---
 
 Projet de formation : développer un blog en PHP
