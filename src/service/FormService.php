@@ -120,7 +120,8 @@ class FormService
 
             // Si la donnée est obligatoire mais manquante
             if ($data[0] == 1) {
-                $dataNeeded = $_POST[$data[1]];
+                $dataNeeded = filter_input(INPUT_POST, $data[1]);
+
                 if (!isset($dataNeeded) || empty($dataNeeded)) {
                     AuthService::startSession();
                     AuthService::updateSession('erreur', 'Merci de remplir tous les 

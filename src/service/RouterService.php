@@ -86,7 +86,7 @@ class RouterService
      */
     public function __construct()
     {
-        $this->_url     = trim($_SERVER['REQUEST_URI'], '/');
+        $this->_url = trim(filter_input(INPUT_SERVER, 'REQUEST_URI'), '/');
         $this->_dataUrl = explode('/', $this->_url);
     }
 

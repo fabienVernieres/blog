@@ -148,7 +148,7 @@ class PostController extends MainController
         $post = new PostEntity;
         $comment = new stdClass;
 
-        $slug = $_POST['slug'];
+        $slug = filter_input(INPUT_POST, 'slug');
 
         // Contrôle les données reçues pour le post
         FormService::controlData($post, [

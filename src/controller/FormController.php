@@ -269,9 +269,9 @@ class FormController extends AdminController
         $link = new LinkEntity;
 
         // Identifiants du lien
-        $id       = $_POST['id'];
-        $slug     = $_POST['slug'];
-        $category = $_POST['category'];
+        $id = filter_input(INPUT_POST, 'id');
+        $slug = filter_input(INPUT_POST, 'slug');
+        $category = filter_input(INPUT_POST, 'category');
 
         // Contrôle les donnes reçues
         // Contrôle les donnes reçues pour le post

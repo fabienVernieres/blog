@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b56e4de24bdd4144aa5bebccabbad161)](https://www.codacy.com/gh/fabienVernieres/blog/dashboard?utm_source=github.com&utm_medium=referral&utm_content=fabienVernieres/blog&utm_campaign=Badge_Grade)
+
 # Projet Blog en PHP
 
 ---
@@ -11,7 +13,7 @@ Projet de formation : développer un blog en PHP
 3. [Installation](#installation)
 4. [Prise en main](#prise-en-main)
 
-# Informations générales
+## Informations générales
 
 La démonstration du projet est disponible à cette adresse :
 [blog.fabienvernieres.com](https://blog.fabienvernieres.com)
@@ -20,7 +22,7 @@ Auteur du projet : fabien Vernières
 [fabienvernieres.com](https://fabienvernieres.com)
 Date : septembre 2022
 
-# Technologies
+## Technologies
 
 Cette application est optimisée pour un serveur PHP 8.0.0
 
@@ -33,7 +35,7 @@ Ce dossier comporte également le routeur de l'application.
 
 Le frontend est réalisé avec le framework Boostrap.
 
-# Installation
+## Installation
 
 Téléchargez le dossier ZIP du code ou cloner le dépôt sur votre périphérique.
 
@@ -86,6 +88,6 @@ Tapez ensuite la commande suivante sur le terminal de votre serveur:
 composer install
 ```
 
-# Prise en main
+## Prise en main
 
 Une fois le projet installé sur votre serveur, la base de données alimentée, vous pouvez vous connecter à l'espace d'administration en utilisant le mail suivant `exemple@domaine.com` et mot de passe `12345678` en suivant le lien `Connexion` dans le menu en haut à droite.
